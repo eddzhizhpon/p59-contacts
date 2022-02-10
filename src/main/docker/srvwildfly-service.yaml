@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: srvwildfly
+  name: srvwildfly
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "8899"
+      port: 8899
+      targetPort: 8009
+    - name: "9992"
+      port: 9992
+      targetPort: 9990
+    - name: "8787"
+      port: 8787
+      targetPort: 8787
+  selector:
+    io.kompose.service: srvwildfly
+status:
+  loadBalancer: {}

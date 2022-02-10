@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: srvnginx
+  name: srvnginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: srvnginx
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/datalogger_net: "true"
+        io.kompose.service: srvnginx
+    spec:
+      containers:
+        - image: image/p59-contacts-app
+          name: srvnginx
+          ports:
+            - containerPort: 80
+          resources: {}
+          imagePullPolicy: Never
+      hostname: srvnginx
+      restartPolicy: Always
+status: {}

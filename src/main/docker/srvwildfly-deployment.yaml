@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: srvwildfly
+  name: srvwildfly
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: srvwildfly
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/datalogger_net: "true"
+        io.kompose.service: srvwildfly
+    spec:
+      containers:
+        - args:
+            - /opt/jboss/wildfly/bin/standalone.sh
+            - -b
+            - 0.0.0.0
+            - -c
+            - standalone.xml
+            - -bmanagement
+            - 0.0.0.0
+            - --debug
+            - '*:8787'
+          env:
+            - name: TZ
+              value: America/Guayaquil
+          image: image/p59-contacts-api
+          name: srvwildfly
+          ports:
+            - containerPort: 8080
+            - containerPort: 8009
+            - containerPort: 9990
+            - containerPort: 8787
+          resources: {}
+          imagePullPolicy: Never
+      hostname: srvwildfly
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: srvdb
+  name: srvdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: srvdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Apps\bin\kompose.exe --file .\docker-compose.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/datalogger_net: "true"
+        io.kompose.service: srvdb
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: contactsdb
+            - name: POSTGRES_PASSWORD
+              value: postgresPass
+            - name: POSTGRES_USER
+              value: postgres
+            - name: TZ
+              value: America/Guayaquil
+          image: postgres
+          name: srvdb
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-data
+      hostname: srvdb
+      restartPolicy: Always
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: pg-data
+status: {}

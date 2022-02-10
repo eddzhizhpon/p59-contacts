@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
+  
+  <datasource 
+    jndi-name="java:jboss/datasources/contactDS" 
+  	pool-name="ContactsDS" 
+  	enabled="true"
+  	use-java-context="true">
+    
+    <connection-url>jdbc:postgresql://srvdb:5432/contactsdb</connection-url>
+    
+    <driver>postgresql</driver>
+    <security>
+      <user-name>postgres</user-name>
+      <password>postgresPass</password>
+    </security>
+    <validation>
+      <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"></valid-connection-checker>
+      <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"></exception-sorter>
+    </validation>
+  </datasource>
+  <!-- 
+  <drivers>
+    <driver name="postgresql" module="org.postgresql">
+      <driver-class>org.postgresql.Driver</driver-class>
+    </driver>
+  </drivers>
+   -->
+</datasources>

@@ -1,0 +1,20 @@
+
+
+<div class="container">
+    <header class="mt-4 mb-4">
+        <h2>Contactos</h2>
+    </header>
+    <div class="row mt-4 mb-4">
+        <div class="col-12">
+            <app-list #listComponent (contactUpdate)="updateContact($event)" ></app-list>
+        </div>
+    </div>
+    
+    <div class="row mt-4 mb-4">
+        <div class="col-12">
+            <app-create-update [contact]="contactSelected" (onSaved)="onSavedContact($event)"></app-create-update>
+        </div>
+    </div>
+</div>
+
+

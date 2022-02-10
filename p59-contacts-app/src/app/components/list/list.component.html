@@ -1,0 +1,30 @@
+<!-- <table mat-table [dataSource]="">
+
+</table> -->
+<div class="row">
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre Completo</th>
+                    <th scope="col">Número</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let contact of contactList$ | async; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ contact.fullName }}</td>
+                    <td>{{ contact.number }}</td>
+                    <td>{{ contact.address }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary m-1" type="button" (click)="updateContact(contact)">Editar</button>
+                        <button class="btn btn-sm btn-danger m-1" type="button" (click)="deleteContact(contact)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

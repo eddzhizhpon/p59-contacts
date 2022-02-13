@@ -3,6 +3,11 @@
 </table> -->
 <div class="row">
     <div class="col-12">
+        <div class="spinner-border text-primary" role="status" *ngIf="loading">
+            <!-- <span class="sr-only">Loading...</span> -->
+        </div>
+        <div [innerHTML]="error | json" *ngIf="error && loading">
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>

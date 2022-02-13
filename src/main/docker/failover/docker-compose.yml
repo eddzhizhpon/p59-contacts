@@ -1,0 +1,82 @@
+version: '3.6'
+
+services:
+    srvdb:
+        image: postgres
+        container_name: srvdb
+        hostname: srvdb
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_DB: contactsdb
+            POSTGRES_PASSWORD: postgresPass
+            TZ:  America/Guayaquil
+        ports:
+            - 5432:5432
+        networks:
+           static-network:
+               ipv4_address: 192.168.100.100
+        volumes:
+            - pg_data:/var/lib/postgresql/data
+            
+    srvwildfly1:
+       image: image/p59-contacts-api
+       container_name: srvwildfly1
+       hostname: srvwildfly1
+       environment:
+           TZ: America/Guayaquil
+       ports:
+           - 8080:8080
+           - 8899:8009
+           - 9992:9990
+           - 8787:8787
+           
+       command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -c standalone.xml -bmanagement 0.0.0.0 --debug *:8787
+       depends_on:
+           - srvdb
+       networks:
+           static-network:
+               ipv4_address: 192.168.100.10
+    
+    srvwildfly2:
+       image: image/p59-contacts-api
+       container_name: srvwildfly2
+       hostname: srvwildfly2
+       environment:
+           TZ: America/Guayaquil
+       ports:
+           - 8080:8080
+           - 8899:8009
+           - 9992:9990
+           - 8787:8787
+           
+       command: /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -c standalone.xml -bmanagement 0.0.0.0 --debug *:8787
+       depends_on:
+           - srvwildfly1
+       networks:
+           static-network:
+               ipv4_address: 192.168.100.20
+    
+    srvnginx:
+         image: image/p59-contacts-app
+         container_name: srvnginx
+         hostname: srvnginx
+         ports:
+            - 80:80
+         depends_on: 
+            - srvwildfly2
+         networks:
+           static-network:
+               ipv4_address: 192.168.100.200
+volumes: 
+    pg_data:
+        driver: local
+        driver_opts:
+            o: bind
+            type: none
+            device: D:\documents\docker\volumes\p59contacts
+            
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24

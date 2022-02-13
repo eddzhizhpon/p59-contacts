@@ -9,7 +9,7 @@
             <app-list #listComponent (contactUpdate)="updateContact($event)" ></app-list>
         </div>
     </div>
-    
+    <hr/>
     <div class="row mt-4 mb-4">
         <div class="col-12">
             <app-create-update [contact]="contactSelected" (onSaved)="onSavedContact($event)"></app-create-update>

@@ -1,9 +1,10 @@
+import { HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Contact } from '@domain/contact';
 import { ContactRestService } from '@services/contact-rest.service';
-import { Observable, Subject, throwError } from 'rxjs';
-import { catchError, startWith, switchMap } from 'rxjs/operators';
+import { Observable, of, Subject, throwError } from 'rxjs';
+import { catchError, startWith, switchMap, endWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list',
@@ -20,13 +21,24 @@ export class ListComponent implements OnInit, OnDestroy {
   readonly contactList$: Observable<Contact[]>;
   private readonly refreshClick$: Subject<void> = new Subject<void>();
 
+  loading: boolean;
+
+  error: any;
+
   constructor(
     private contactRestService: ContactRestService
   ) {
+    this.loading = true;
     this.contactList$ = this.refreshClick$.pipe(
       startWith(undefined),
-      switchMap( () => this.contactRestService.list() )
+      switchMap(() => this.contactRestService.list()),
+      tap( () => this.loading = false),
+      
     );
+    // catchError( (err) => {
+    //   this.error = err;
+    //   return of();
+    // })
   }
   ngOnDestroy(): void {
     this.refreshClick$.complete();
@@ -53,6 +65,8 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   reloadList(): void {
+    this.error = undefined;
+    this.loading = true;
     this.refreshClick$.next();
   }
 }

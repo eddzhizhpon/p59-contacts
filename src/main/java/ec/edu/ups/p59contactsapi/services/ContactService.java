@@ -1,5 +1,7 @@
 package ec.edu.ups.p59contactsapi.services;
 
+import java.io.File;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -11,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import ec.edu.ups.p59contactsapi.business.ContactManagement;
 import ec.edu.ups.p59contactsapi.model.Contact;
@@ -30,6 +33,7 @@ public class ContactService {
 			contactManagement.save(contact);
 			return APIResponse.getResponse(201, contact);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return APIResponse.getResponse(500, e.getMessage());
 		}
 	}
@@ -68,6 +72,20 @@ public class ContactService {
 		} catch (Exception e) {
 			return APIResponse.getResponse(500, e.getMessage());
 		}
+	}
+	
+	@GET
+	@Path("/download")
+	public Response download() {
+		try {
+			File temp = contactManagement.downloadFile();
+			ResponseBuilder response = Response.ok((Object) temp);
+			response.header("Content-Disposition", "attachment;filename=contact_list.json");
+			return response.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return APIResponse.getResponse(500, "fail to Download");
 	}
 	
 	@GET

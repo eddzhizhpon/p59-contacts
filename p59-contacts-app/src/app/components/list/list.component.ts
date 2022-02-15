@@ -5,6 +5,7 @@ import { Contact } from '@domain/contact';
 import { ContactRestService } from '@services/contact-rest.service';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, startWith, switchMap, endWith, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-list',
@@ -17,6 +18,7 @@ export class ListComponent implements OnInit, OnDestroy {
   updateContactEmit = new EventEmitter<Contact>();
   
   contactList: Contact[];
+  downloadUrl = environment.wsUrl + '/download';
 
   readonly contactList$: Observable<Contact[]>;
   private readonly refreshClick$: Subject<void> = new Subject<void>();
@@ -35,11 +37,8 @@ export class ListComponent implements OnInit, OnDestroy {
       tap( () => this.loading = false),
       
     );
-    // catchError( (err) => {
-    //   this.error = err;
-    //   return of();
-    // })
   }
+  
   ngOnDestroy(): void {
     this.refreshClick$.complete();
   }
